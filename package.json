@@ -1,13 +1,28 @@
 {
-  "name": "terrarisk-engine-workspace",
-  "version": "1.0.0",
+  "name": "terrarisk-engine",
+  "version": "0.1.0",
   "private": true,
-  "description": "TerraRisk Engine: Predictive Climate & Micro-Location Yield Engine (Track 2)",
   "scripts": {
-    "dev": "npm --prefix clima-yield-sentinel run dev",
-    "build": "npm --prefix clima-yield-sentinel run build",
-    "start": "npm --prefix clima-yield-sentinel run start",
-    "lint": "npm --prefix clima-yield-sentinel run lint"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@google/genai": "^3.3.0",
+    "lucide-react": "^1.73.0",
+    "next": "16.4.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "tailwindcss": "4.3.3",
+    "typescript": "^5"
   }
 }
-
