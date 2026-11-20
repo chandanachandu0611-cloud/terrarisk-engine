@@ -1,8 +1,24 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShieldAlert, CloudRain, AlertTriangle, CheckCircle2, BarChart3, MapPin, Database, Cpu, TrendingUp, Navigation, Thermometer, Radio, Globe, MessageSquare } from 'lucide-react';
+import { AlertTriangle, Radio, Globe, MessageSquare } from 'lucide-react';
 import { KARNATAKA_DISTRICTS_DATA, getAutoCorrectedSeason, validateCropSuitability } from '@/app/data/districts';
+
+export interface TelemetryData {
+  district: string;
+  cropType: string;
+  season: string;
+  month: string;
+  riskScore: number;
+  riskLevel: 'Low' | 'Moderate' | 'High' | 'Critical';
+  primaryHazard: string;
+  yieldImpact: string;
+  calcBreakdown: string;
+  analysisDetails: string;
+  mitigationAdvisory: string[];
+  telemetrySource: string;
+  timestamp: string;
+}
 
 const KARNATAKA_DISTRICTS = Object.keys(KARNATAKA_DISTRICTS_DATA).sort();
 
@@ -196,11 +212,10 @@ export default function Home() {
   const suitability = validateCropSuitability(district, cropType);
 
   const [loading, setLoading] = useState(false);
-  const [telemetry, setTelemetry] = useState<any | null>(null);
+  const [telemetry, setTelemetry] = useState<TelemetryData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [liveTemp, setLiveTemp] = useState<number | null>(null);
-  const [liveCondition, setLiveCondition] = useState<string | null>(null);
   const [fetchingGPS, setFetchingGPS] = useState(false);
 
   const fetchLiveGPSWeather = () => {
@@ -219,12 +234,11 @@ export default function Home() {
         const lon = position.coords.longitude;
 
         try {
-          const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}¤t=temperature_2m,weather_code,relative_humidity_2m`);
+          const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,relative_humidity_2m`);
           const weatherData = await res.json();
 
           if (weatherData && weatherData.current) {
             setLiveTemp(weatherData.current.temperature_2m);
-            setLiveCondition(`Temp: ${weatherData.current.temperature_2m}°C, Humidity: ${weatherData.current.relative_humidity_2m}%`);
           }
 
           const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
@@ -247,7 +261,6 @@ export default function Home() {
       },
       () => {
         setLiveTemp(29);
-        setLiveCondition('Coastal Sensor: 29°C, Humid');
         setDistrict('Udupi');
         setFetchingGPS(false);
       },
@@ -363,7 +376,7 @@ export default function Home() {
             Team TerraRisk | Hackathon Prototype | Karnataka
           </div>
           <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#422006', lineHeight: 1.4 }}>
-            Problem: Generic agro-advisory fails in Karnataka's 10 agro-climatic zones. Same advice for Udupi and Chikkaballapura does not work.
+            Problem: Generic agro-advisory fails in Karnataka&apos;s 10 agro-climatic zones. Same advice for Udupi and Chikkaballapura does not work.
           </div>
         </div>
 
@@ -409,7 +422,7 @@ export default function Home() {
 
           {/* ADDITION 1: Tagline Directly Under Heading */}
           <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#166534', textAlign: 'center', marginBottom: '25px', letterSpacing: '-0.2px' }}>
-            "Saving farmers from one-size-fits-all advice"
+            &ldquo;Saving farmers from one-size-fits-all advice&rdquo;
           </div>
 
           {/* Non-Blocking Yellow Warning Alert for Unusual Pairings */}

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ClimateTelemetry, AnalysisRequestPayload } from '@/types/risk';
+import { ClimateTelemetry } from '@/types/risk';
 
 export async function POST(req: Request) {
   try {
@@ -13,9 +13,9 @@ export async function POST(req: Request) {
     let riskScore = 42;
     let riskLevel: 'Low' | 'Moderate' | 'High' | 'Critical' = 'Moderate';
     let primaryHazard = 'Seasonal Climate Transition Stress';
-    let yieldImpact = '-4% to -7%';
+    const yieldImpact = '-4% to -7%';
     let details = `Telemetry analysis for ${district} during ${month} indicates stable vegetative indices under prevailing seasonal conditions for ${cropType}.`;
-    let source = 'IMD Gridded Baseline';
+    const source = 'IMD Gridded Baseline';
 
     if (liveTemp) {
       details += ` [Live Sensor Feed: Ambient Temp ${liveTemp}°C, Condition: ${liveCondition}].`;
@@ -51,12 +51,13 @@ export async function POST(req: Request) {
         'Monitor soil moisture sensors and local weather bulletins.',
         'Apply recommended bio-organic inputs as per state agricultural guidelines.'
       ],
-      telemetrySource: liveTemp ? ('Live IoT / Open-Meteo Station' as any) : source,
+      telemetrySource: (liveTemp ? 'Live IoT / Open-Meteo Station' : source) as ClimateTelemetry['telemetrySource'],
       timestamp: new Date().toISOString(),
     };
 
     return NextResponse.json(result);
-  } catch (err: any) {
+  } catch (err: unknown) {
+    console.error('Error in analyze route:', err);
     return NextResponse.json({ error: 'Failed to process request.' }, { status: 500 });
   }
 }
