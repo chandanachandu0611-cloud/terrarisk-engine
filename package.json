@@ -1,0 +1,13 @@
+{
+  "name": "terrarisk-engine-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TerraRisk Engine: Predictive Climate & Micro-Location Yield Engine (Track 2)",
+  "scripts": {
+    "dev": "npm --prefix clima-yield-sentinel run dev",
+    "build": "npm --prefix clima-yield-sentinel run build",
+    "start": "npm --prefix clima-yield-sentinel run start",
+    "lint": "npm --prefix clima-yield-sentinel run lint"
+  }
+}
+
